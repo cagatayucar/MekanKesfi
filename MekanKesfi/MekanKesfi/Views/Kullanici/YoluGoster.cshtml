@@ -1,0 +1,112 @@
+﻿@model MekanKesfi.Models.Mekanlar
+<ul class="nav navbar-nav navbar-right">
+    <li>@Html.ActionLink("Geri Dön", "KullaniciAnasayfa", "Kullanici")</li>
+</ul>
+
+<br />
+<br />
+<br />
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <title>Create Driving Route</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+    <script type="text/javascript">
+        var map = null;
+        var directionsManager;
+        var directionsErrorEventObj;
+        var directionsUpdatedEventObj;
+        var toLat = null;
+        var toLng = null;
+        var bulunulanEnlem = null;
+        var bulunulanBoylam = null;
+        navigator.geolocation.getCurrentPosition(onPositionReady);
+        function getMap() {
+            map = new Microsoft.Maps.Map(document.getElementById('myMap'), { credentials: 'AkRFb3IW1V4bNjh1wKRt6InGzSZsv6TF8xR2iLsKQSXgyWyfdL2MWKAAMfEUuyLT' });
+
+            var la = document.getElementById("lat");
+            toLat = parseFloat(la.value.replace(",", "."));
+            var lo = document.getElementById("lon");
+            toLng = parseFloat(lo.value.replace(",", "."));
+
+
+            var geoLocationProvider = new Microsoft.Maps.GeoLocationProvider(map);
+            
+        }
+        function onPositionReady(position) {
+            // Apply the position to the map
+
+            bulunulanEnlem = position.coords.latitude;
+            bulunulanBoylam = position.coords.longitude;
+
+        }
+
+        function createDirectionsManager() {
+            var displayMessage;
+            if (!directionsManager) {
+                directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+                displayMessage = 'Directions Module loaded\n';
+                displayMessage += 'Directions Manager loaded';
+            }
+            
+            directionsManager.resetDirections();
+            directionsErrorEventObj = Microsoft.Maps.Events.addHandler(directionsManager, 'directionsError' );
+            directionsUpdatedEventObj = Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated');
+        }
+
+        function createDrivingRoute() {
+            if (!directionsManager) { createDirectionsManager(); }
+            directionsManager.resetDirections();
+            
+            directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.driving });
+            
+            var bulunulan = new Microsoft.Maps.Directions.Waypoint({ location: new Microsoft.Maps.Location(bulunulanEnlem, bulunulanBoylam) });
+            directionsManager.addWaypoint(bulunulan);
+            var gidilecek = new Microsoft.Maps.Directions.Waypoint({location: new Microsoft.Maps.Location(toLat, toLng) });
+            directionsManager.addWaypoint(gidilecek);
+            
+            directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('directionsItinerary') });
+            directionsManager.calculateDirections();
+            bulunulanEnlem.value = 0;
+            bulunulanBoylam.value = 0;
+        }
+
+        function createDirections() {
+            if (!directionsManager) {
+                Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: createDrivingRoute });
+            }
+            else {
+                createDrivingRoute();
+            }
+        }
+    </script>
+</head>
+<body onload="getMap(); createDirections();" >
+    <div id='myMap' style="position:relative; width:1200px; height:400px;"></div>
+    
+    <div id='directionsItinerary'> </div>
+</body>
+</html>
+
+
+<table>
+
+    <tr>
+        <td style="font-weight:bold">Gidilicek Enlem</td>
+
+        <td>@Html.EditorFor(model => ViewData["lat"], new { htmlAttributes = new { @class = "form-control", id="lat" } })</td>
+        @Html.ValidationMessageFor(model => model.latitude, "", new { @class = "text-danger" })
+
+    </tr>
+    <tr>
+
+        <td style="font-weight:bold">Gidilicek Boylam</td>
+
+        <td>@Html.EditorFor(model => ViewData["lon"], new { htmlAttributes = new { @class = "form-control", id="lon" } })</td>
+        @Html.ValidationMessageFor(model => model.longitude, "", new { @class = "text-danger" })
+
+
+    </tr>
+
+</table>

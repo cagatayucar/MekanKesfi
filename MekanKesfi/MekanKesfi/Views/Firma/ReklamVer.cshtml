@@ -1,0 +1,97 @@
+﻿@model MekanKesfi.Models.Reklam
+
+@{
+    ViewBag.Title = "ReklamVer";
+
+
+}
+<ul class="nav navbar-nav navbar-right">
+    <li>@Html.ActionLink("Çıkış", "FirmaLoginSayfasi", "Firma", routeValues: null, htmlAttributes: new { id = "outLink" })</li>
+</ul>
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>
+        Current Location of User in Bing Map
+    </title>
+    <script type="text/javascript"
+            src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0">
+    </script>
+    <script type="text/javascript">
+        var map = null;
+        function GetMap() {
+            map = new Microsoft.Maps.Map(document.getElementById('myMap'),
+                 { credentials: "AkRFb3IW1V4bNjh1wKRt6InGzSZsv6TF8xR2iLsKQSXgyWyfdL2MWKAAMfEUuyLT" });
+
+            // Gets current location of user and calls ZoomIn function on success
+            var geoLocationProvider = new Microsoft.Maps.GeoLocationProvider(map);
+            geoLocationProvider.getCurrentPosition({ successCallback: ZoomIn });
+            geoLocationProvider.getCurrentPosition({ successCallback: LokasyonGetir });
+
+            // Zooms the map to current location
+            function ZoomIn(args) {
+
+                map.setView({
+                    zoom: 17,
+                    center: args.center
+                });
+
+
+
+                // Marks current location with a circle and sets its border width,
+                // border color and body color
+                geoLocationProvider.addAccuracyCircle(args.center, 20, 20, {
+                    polygonOptions: {
+                        strokeThickness: 2,
+                        fillColor: new Microsoft.Maps.Color(200, 255, 128, 0),
+                        strokeColor: new Microsoft.Maps.Color(255, 0, 128, 0)
+                    }
+                });
+            }
+        }
+    </script>
+</head>
+<body onload="GetMap();">
+    <form id="form1" runat="server">
+        <div id="myMap"
+             style="position:relative; width:1200px; height:335px;">
+        </div>
+    </form>
+
+
+
+
+
+</body>
+</html>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <h2>Reklam Ver</h2>
+
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <table>
+            <tr>
+
+                <td style="font-weight:bold">Reklam</td>
+                <td>@Html.EditorFor(model => model.aciklama, new { htmlAttributes = new { @class = "form-control", style = "width: 1200px;  height: 100px;" } })</td>
+                @Html.ValidationMessageFor(model => model.aciklama, "", new { @class = "text-danger" })
+
+            </tr>
+            <tr>
+                <td></td>
+                <td align="center"><input type="submit" value="Reklam Ver" class="btn btn-default" /></td>
+            </tr>
+        </table>
+        
+
+
+    </div>
+}

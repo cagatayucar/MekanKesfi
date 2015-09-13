@@ -1,0 +1,39 @@
+﻿@model IEnumerable<MekanKesfi.Models.FirmaLogin>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.parola)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mek_id)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.parola)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mek_id)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.kullanici_adi }) |
+            @Html.ActionLink("Details", "Details", new { id=item.kullanici_adi }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.kullanici_adi })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,112 @@
+﻿@model MekanKesfi.Models.MekanReklamModel
+@using PagedList
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "KullaniciAnasayfa";
+}
+<ul class="nav navbar-nav navbar-right">
+    <li>@Html.ActionLink("Kayıt Ol", "FirmaSahibiKayit", "Firma", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+    <li>@Html.ActionLink("Giriş Yap", "FirmaLoginSayfasi", "Firma", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+</ul>
+<br />
+<br />
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>
+        Current Location of User in Bing Map
+    </title>
+    <script type="text/javascript"
+            src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0">
+    </script>
+    <script type="text/javascript">
+    var map = null;
+    function GetMap() {
+        map = new Microsoft.Maps.Map(document.getElementById('myMap'),
+             { credentials: "AkRFb3IW1V4bNjh1wKRt6InGzSZsv6TF8xR2iLsKQSXgyWyfdL2MWKAAMfEUuyLT" });
+
+        // Gets current location of user and calls ZoomIn function on success
+        var geoLocationProvider = new Microsoft.Maps.GeoLocationProvider(map);
+        geoLocationProvider.getCurrentPosition({ successCallback: ZoomIn });
+
+        // Zooms the map to current location
+        function ZoomIn(args) {
+            
+                                        
+                map.setView({
+                    zoom: 17,
+                    center: args.center
+                });
+
+
+
+                // Marks current location with a circle and sets its border width,
+                // border color and body color
+                geoLocationProvider.addAccuracyCircle(args.center, 20, 20, {
+                    polygonOptions: {
+                        strokeThickness: 2,
+                        fillColor: new Microsoft.Maps.Color(200, 255, 128, 0),
+                        strokeColor: new Microsoft.Maps.Color(255, 0, 128, 0)
+                    }
+                });
+            }
+        }
+    </script>
+</head>
+<body onload="GetMap();">
+    <form id="form1" runat="server">
+        <div id="myMap"
+             style="position:relative; width:1200px; height:335px;">
+        </div>
+    </form>
+
+
+
+
+
+</body>
+</html>
+
+<table border="1" class="table">
+    <tr>
+    @{
+        int col = 0;
+
+        foreach (var item in Model.mekanlar)
+        {
+            foreach (var item2 in item.Reklam)
+            {
+                if (col == 0 || col == 4)
+                {
+                    col = 0;
+                    <tr></tr>
+                }
+                
+                col++;
+                
+                <td style="width:25%; height: 25%;">
+                    @Html.DisplayFor(modelItem => item.mekan_adi)
+                    @if (item.fotograf != null)
+                    {
+                        <p><img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(item.fotograf))" /></p>
+                    }
+
+                    @if (item.id.Equals(item2.mekan_id))
+                    {
+                        <p>@Html.DisplayFor(modelItem => item2.aciklama)</p>
+                    }
+
+                    <p>@Html.ActionLink("Yolu Göster", "Yolugoster", new { id = item.id })</p>
+
+                </td>
+            }
+        }
+
+    }
+    </tr>
+</table>
+
+
+
+
+
+

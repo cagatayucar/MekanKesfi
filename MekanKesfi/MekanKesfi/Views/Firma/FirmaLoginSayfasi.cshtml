@@ -1,0 +1,53 @@
+﻿
+@model MekanKesfi.Models.FirmaLogin
+<div>
+    @{
+        ViewBag.Title = "FirmaLoginSayfasi";
+    }
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Kayıt Ol", "FirmaSahibiKayit", "Firma", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Giriş Yap", "FirmaLoginSayfasi", "Firma", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+   
+    <br />
+    <br />
+    <br />
+
+    <center><h2>Firma Sahibi Girişi</h2></center>
+
+    @using (Html.BeginForm("FirmaLoginSayfasi", "firma", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        if (@ViewBag.Message != null)
+        {
+            <div style="border:1px solid red" align="center">
+                @ViewBag.Message
+            </div>
+        }
+        <div class="form-group">
+            <table align="center">
+                <tr>
+                    <td style="font-weight: bold;">Kullanıcı Adı</td>
+                    <td>@Html.EditorFor(model => model.kullanici_adi, new { htmlAttributes = new { @class = "form-control" } })</td>
+                    @Html.ValidationMessageFor(model => model.kullanici_adi, "", new { @class = "text-danger" })
+                </tr>
+
+                <tr>
+                    <td style="font-weight: bold;">Parola</td>
+                    <td>@Html.EditorFor(model => model.parola, new { htmlAttributes = new { @class = "form-control", type = "password" } })</td>
+                    @Html.ValidationMessageFor(model => model.parola, "", new { @class = "text-danger" })
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td align="center"> <input type="submit" value="Giriş" class="btn btn-default" />  </td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    }
+</div>
+
+

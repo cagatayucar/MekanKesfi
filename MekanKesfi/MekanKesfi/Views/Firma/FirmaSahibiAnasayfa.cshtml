@@ -1,0 +1,140 @@
+﻿@model MekanKesfi.Models.Reklam
+
+@{
+    ViewBag.Title = "FirmaSahibiAnasayfa";
+}
+
+<ul class="nav navbar-nav navbar-right">
+    <li>@Html.ActionLink("Çıkış", "FirmaLoginSayfasi", "Firma", routeValues: null, htmlAttributes: new { id = "outLink" })</li>
+</ul>
+<br />
+<br />
+<br />
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<script charset="UTF-8" type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0">
+</script>
+<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+<script type="text/javascript">
+    function GetMap() {
+        var map = new Microsoft.Maps.Map(document.getElementById("myMap"),
+    {
+        credentials: "AkRFb3IW1V4bNjh1wKRt6InGzSZsv6TF8xR2iLsKQSXgyWyfdL2MWKAAMfEUuyLT",
+        mapTypeId: Microsoft.Maps.MapTypeId.road,
+        //center: new Microsoft.Maps.Location(40, 35),
+        //zoom: 5
+    });
+       
+        
+        var la = document.getElementById("la");
+        var lat = parseFloat(la.value.replace(",", "."));
+      
+        var lo = document.getElementById("lo"); 
+        var lon = parseFloat(lo.value.replace(",", "."));
+        
+
+        map.setView({
+            zoom: 17,
+            center: new Microsoft.Maps.Location(lat, lon)
+        });
+
+        var lation = new Microsoft.Maps.Location(lat, lon);
+        var pin = new Microsoft.Maps.Pushpin(lation, {text: '1', draggable: true });
+        map.entities.push(pin);
+
+
+
+        Microsoft.Maps.Events.addHandler(pin, 'dragstart', StartDragHandler);
+        Microsoft.Maps.Events.addHandler(pin, 'drag', DragHandler);
+        Microsoft.Maps.Events.addHandler(pin, 'dragend', EndDragHandler);
+    }
+
+</script>
+<style>
+    #myMap {
+        position: absolute;
+        width: 600px;
+        height: 200px;
+        border: #f00 2px solid;
+    }
+    </style>
+    
+        
+
+       
+
+        
+                   
+        
+
+<body onload="GetMap();">
+    <form id="form1" runat="server">
+        <div id="myMap"
+             style="position:relative; width:1200px; height:335px;">
+        </div>
+    </form>
+    
+
+</body>
+
+
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.reklam_id)
+
+        @Html.HiddenFor(model => model.mekan_id)
+        
+           
+
+            <div class="form-group">
+                <table>
+                    <tr>
+
+                        <td style="font-weight:bold">Enlem</td>
+                        <td>@Html.EditorFor(model => ViewData["latitude"], new { htmlAttributes = new { @class = "form-control", id = "la", name = "lat" } })</td>
+                       
+
+                    </tr>
+                    <tr>
+
+                        <td style="font-weight:bold">Boylam</td>
+
+                        <td>@Html.EditorFor(model => ViewData["longitude"], new { htmlAttributes = new { @class = "form-control", id = "lo", name = "lon" } })</td>
+                        @Html.ValidationMessageFor(model => model.aciklama, "", new { @class = "text-danger" })
+                    </tr>
+
+                    @*<tr>
+
+                        <td style="font-weight:bold">Reklamın Veriliş Zamanı</td>
+                        <td>@Html.EditorFor(model => model.verilis_zamani, new { htmlAttributes = new { @class = "form-control" } })</td>
+                        @Html.ValidationMessageFor(model => model.verilis_zamani, "", new { @class = "text-danger" })
+
+                    </tr>*@
+                    <tr>
+
+                        <td style="font-weight:bold">Reklam Açıklaması</td>
+
+                        <td>@Html.EditorFor(model => model.aciklama, new { htmlAttributes = new { @class = "form-control", style = "width: 1200px;  height: 100px;" } })</td>
+                        @Html.ValidationMessageFor(model => model.aciklama, "", new { @class = "text-danger" })
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td align="center"> <input type="submit" value="Reklam Kaydet" class="btn btn-default" />  </td>
+                        <td></td>
+                    </tr>
+                </table>
+
+            </div>
+</div>
+}
+        

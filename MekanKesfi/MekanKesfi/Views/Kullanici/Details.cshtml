@@ -1,0 +1,42 @@
+﻿@model MekanKesfi.Models.Reklam
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Reklam</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.mekan_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mekan_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.verilis_zamani)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.verilis_zamani)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.aciklama)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.aciklama)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.reklam_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
